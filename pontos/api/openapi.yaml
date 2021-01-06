@@ -1,0 +1,20 @@
+openapi: 3.0.2
+
+info:
+  version: 0.0.1
+  title: Projeto FI
+
+servers:
+  - url: http://localhost:5000
+    description: Local
+
+paths:
+
+  /version:
+    get:
+      operationId: pontos.api.api_version
+      summary: Retorna a versão da API
+      responses:
+        200:
+          description: Success
+

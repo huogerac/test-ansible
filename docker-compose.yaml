@@ -1,0 +1,19 @@
+version: "3.4"
+services:
+
+  master:
+    container_name: fi
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: development
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: pontos.app
+      FLASK_SECRET_KEY: ijhsabfgiipfhsiufhewi
+      C_FORCE_ROOT: "y"
+    volumes:
+      - ./:/app
+    ports:
+      - "5000:5000"
+    tty: true
