@@ -6,7 +6,7 @@ def api_version():
         jsonify(
             {
                 "version": {
-                    "api": "0.0.1",
+                    "api": "0.0.2",
                 },
             }
         ),
