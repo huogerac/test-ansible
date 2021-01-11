@@ -18,3 +18,96 @@ paths:
         200:
           description: Success
 
+  /cartao:
+    get:
+      operationId: pontos.api.cartoes.listar_cartoes
+      description: Lista todos cartoes de clientes
+      tags:
+        - Programa de Pontos
+      parameters:
+        - name: empresa_id
+          in: query
+          description: Id da empresa_id
+          schema:
+            type: integer
+        - name: programa_id
+          in: query
+          description: Id do programa de pontos
+          schema:
+            type: integer
+        - name: page
+          in: query
+          description: Índice da página
+          schema:
+            type: integer
+        - name: page_size
+          in: query
+          description: Tamanho da página
+          schema:
+            type: integer
+
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Cartao"
+        401:
+          description: Not Authorized
+        403:
+          description: Not Allowed
+
+
+components:
+
+  schemas:
+
+    Cartao:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 100
+        empresa_id:
+          type: integer
+          example: 1
+        programa_id:
+          type: integer
+          example: 1
+        usuario:
+          $ref: "#/components/schemas/Usuario"
+        pontos:
+          type: integer
+          example: 3
+
+    Usuario:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 100
+        nome_completo:
+          type: string
+          example: José da Silva
+        fone:
+          type: string
+          example: 12991900999
+        email:
+          type: string
+          example: jose@example.com
+        avatar:
+          type: string
+          example: http://example.com/img/avatar/jose_thumb.png
+        criado_em:
+          type: string
+          format: date-time
+          example: 2021-01-11T11:32:28Z
+
+

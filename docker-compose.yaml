@@ -12,8 +12,25 @@ services:
       FLASK_APP: pontos.app
       FLASK_SECRET_KEY: ijhsabfgiipfhsiufhewi
       C_FORCE_ROOT: "y"
+      DATABASE_URI: postgresql://pontos:pontos@postgres/pontos
     volumes:
       - ./:/app
     ports:
       - "5000:5000"
     tty: true
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:12.5-alpine
+    ports:
+      - 5432:5432
+    expose:
+      - "5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+      - ./devops/docker/entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    environment:
+      POSTGRES_USER: pontos
+      POSTGRES_PASSWORD: pontos
+      POSTGRES_DB: pontos

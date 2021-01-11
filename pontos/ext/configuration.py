@@ -1,7 +1,10 @@
 import os
 from importlib import import_module
 
-EXTENSIONS = []
+EXTENSIONS = [
+    "pontos.ext.database",
+    "pontos.ext.admin",
+]
 
 
 def init_app(app):
@@ -22,6 +25,16 @@ class ProductionConfig(object):
     TESTING = False
 
     SECRET_KEY = os.getenv("FLASK_SECRET_KEY", "Ch@nG3_th1s_IN_PR0D!")
+
+    # Database
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI", "postgresql://pontos:pontos@localhost/pontos")
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    # ext.admin
+    FLASK_ADMIN_SWATCH = "flatly"
+
+    BASIC_AUTH_USERNAME = "pontos"
+    BASIC_AUTH_PASSWORD = "pontos"
 
 
 class DevelopmentConfig(ProductionConfig):
