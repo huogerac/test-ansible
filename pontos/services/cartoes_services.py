@@ -10,6 +10,13 @@ from pontos.models.usuarios import Usuario
 
 def listar_cartoes():
 
+    pontos_ativos = (
+        db.session.query(Ponto.cartao_id.label("cartao_id"), func.count(Ponto.cartao_id).label("total"))
+        .group_by(Ponto.cartao_id)
+        .filter(Ponto.removido_em == None)
+        .subquery("pontos_ativos")
+    )
+
     qs = (
         db.session.query(
             Cartao.id,
@@ -21,8 +28,10 @@ def listar_cartoes():
             Usuario.email,
             Usuario.avatar,
             Usuario.criado_em,
+            pontos_ativos.c.total,
         )
         .join(Usuario)
+        .join(pontos_ativos, pontos_ativos.c.cartao_id == Cartao.id, isouter=True)
         .all()
     )
 
@@ -39,9 +48,9 @@ def listar_cartoes():
                 "avatar": avatar,
                 "criado_em": criado_em.isoformat(),
             },
-            "pontos": 2,
+            "pontos": pontos if pontos else 0,
         }
-        for (c_id, e_id, p_id, u_id, nome, fone, email, avatar, criado_em) in qs
+        for (c_id, e_id, p_id, u_id, nome, fone, email, avatar, criado_em, pontos) in qs
     ]
 
 
