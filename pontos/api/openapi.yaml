@@ -66,7 +66,7 @@ paths:
 
   /cartao/{cartao_id}/ponto/adiciona:
     post:
-      operationId: pontos.api.cartoes.adiciona_ponto
+      operationId: pontos.api.cartoes.adicionar_ponto
       description: Adiciona 1 ponto ao cartao
       tags:
         - Cartoes
@@ -96,7 +96,7 @@ paths:
 
   /cartao/{cartao_id}/ponto/remove:
     post:
-      operationId: pontos.api.cartoes.remove_ponto
+      operationId: pontos.api.cartoes.remover_ponto
       description: Remove 1 ponto do cartao
       tags:
         - Cartoes
@@ -164,6 +164,7 @@ components:
         avatar:
           type: string
           example: http://example.com/img/avatar/jose_thumb.png
+          nullable: true
         criado_em:
           type: string
           format: date-time

@@ -8,9 +8,9 @@ def listar_cartoes():
     return {"data": cartoes}
 
 
-def adiciona_ponto(cartao_id):
-    return {}
+def adicionar_ponto(cartao_id):
+    return cartoes_services.adicionar_ponto(cartao_id)
 
 
-def remove_ponto(cartao_id):
-    return {}
+def remover_ponto(cartao_id):
+    return cartoes_services.remover_ponto(cartao_id)

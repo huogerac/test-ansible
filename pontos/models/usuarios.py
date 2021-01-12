@@ -20,3 +20,13 @@ class Usuario(db.Model):
 
     def __repr__(self):
         return "{} ({})".format(self.nome_completo, self.fone)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nome_completo": self.nome_completo,
+            "fone": self.fone,
+            "email": self.email,
+            "avatar": self.avatar,
+            "criado_em": self.criado_em.isoformat(),
+        }
