@@ -23,7 +23,7 @@ paths:
       operationId: pontos.api.cartoes.listar_cartoes
       description: Lista todos cartoes de clientes
       tags:
-        - Programa de Pontos
+        - Cartoes
       parameters:
         - name: empresa_id
           in: query
@@ -64,6 +64,65 @@ paths:
         403:
           description: Not Allowed
 
+  /cartao/{cartao_id}/ponto/adiciona:
+    post:
+      operationId: pontos.api.cartoes.adiciona_ponto
+      description: Adiciona 1 ponto ao cartao
+      tags:
+        - Cartoes
+      parameters:
+        - name: cartao_id
+          in: path
+          description: ID do cartão
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cartao"                         
+        400:
+          description: Cartao não pode receber pontos
+        401:
+          description: Not Authorized
+        403:
+          description: Not Allowed
+        404:
+          description: Cartao não encontrado
+
+  /cartao/{cartao_id}/ponto/remove:
+    post:
+      operationId: pontos.api.cartoes.remove_ponto
+      description: Remove 1 ponto do cartao
+      tags:
+        - Cartoes
+      parameters:
+        - name: cartao_id
+          in: path
+          description: ID do cartao
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cartao"                         
+        400:
+          description: Cartao já resgatado ou não tem ponto para ser removido
+        401:
+          description: Not Authorized
+        403:
+          description: Not Allowed
+        404:
+          description: Cartao não encontrado
 
 components:
 
