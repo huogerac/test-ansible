@@ -16,6 +16,8 @@ def get_config_from_env():
     envname = os.getenv("FLASK_ENV", "development").lower()
     if envname == "production":
         return ProductionConfig()
+    elif envname == "testing":
+        return TestingConfig()
     return DevelopmentConfig()
 
 
@@ -35,6 +37,12 @@ class ProductionConfig(object):
 
     BASIC_AUTH_USERNAME = "pontos"
     BASIC_AUTH_PASSWORD = "pontos"
+
+
+class TestingConfig(ProductionConfig):
+    FLASK_ENV = "testing"
+    DEBUG = True
+    SQLALCHEMY_DATABASE_URI = "postgresql://pontos:pontos@localhost/pontos_test"
 
 
 class DevelopmentConfig(ProductionConfig):
