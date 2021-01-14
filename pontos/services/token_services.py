@@ -25,15 +25,18 @@ def generate_token(user, days=0, hours=0):
     )
 
 
-def decode_token(token):
+def check_token_info(token):
     try:
-        result = jwt.decode(
+        token_info = jwt.decode(
             jwt=token,
             key=current_app.config["SECRET_KEY"],
             issuer="http://fi.com",
             audience="uniquenumber.fi.com",
             algorithms=["HS256"],
         )
-        return result
-    except InvalidTokenError as error:
-        raise UnauthorizedException(str(error))
+        token_info["scope"] = [token_info.get("perfil")]
+        return token_info
+    except jwt.ExpiredSignatureError:
+        raise UnauthorizedException(f"Expired token: {str(error)}")
+    except Exception as error:
+        raise UnauthorizedException(f"Invalid token: {str(error)}")

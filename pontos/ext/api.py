@@ -1,7 +1,7 @@
 from flask import Flask
 import connexion
 
-from pontos.exceptions import NotFoundException, InvalidValueException
+from pontos.exceptions import NotFoundException, InvalidValueException, UnauthorizedException
 
 
 def create_api_app(version="api"):
@@ -24,6 +24,14 @@ def create_api_app(version="api"):
             "detail": str(error),
             "status": 400,
             "title": "Bad Request",
+        }
+
+    @app.errorhandler(UnauthorizedException)
+    def unauthorized_handler(error):
+        return {
+            "detail": str(error),
+            "status": 401,
+            "title": "Unauthorized Request",
         }
 
     return app

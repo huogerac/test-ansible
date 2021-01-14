@@ -24,6 +24,9 @@ paths:
       description: Lista todos cartoes de clientes
       tags:
         - Cartoes
+      security:
+        - oauth2: [cliente]
+        - oauth2: [gerente]
       parameters:
         - name: empresa_id
           in: query
@@ -70,6 +73,8 @@ paths:
       description: Adiciona 1 ponto ao cartao
       tags:
         - Cartoes
+      security:
+        - oauth2: [gerente]
       parameters:
         - name: cartao_id
           in: path
@@ -100,6 +105,8 @@ paths:
       description: Remove 1 ponto do cartao
       tags:
         - Cartoes
+      security:
+        - oauth2: [gerente]
       parameters:
         - name: cartao_id
           in: path
@@ -165,6 +172,11 @@ paths:
           description: Email ou senha inválida
 
 components:
+
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      x-tokenInfoFunc: pontos.services.token_services.check_token_info
 
   schemas:
 
