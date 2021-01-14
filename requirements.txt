@@ -12,3 +12,6 @@ psycopg2-binary==2.8.6
 # Admin
 Flask-Admin==1.5.7
 Flask-BasicAuth==0.2.0
+
+# AUTH
+PyJWT==2.0.0

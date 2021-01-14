@@ -17,6 +17,30 @@ class Empresa(db.Model):
         return "{} ({})".format(self.nome, self.id)
 
 
+class EmpresaGerente(db.Model):
+
+    __tablename__ = "empresagerentes"
+
+    PERFILS = ("gerente", "cliente")
+
+    id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
+    empresa_id = sa.Column(
+        sa.Integer,
+        sa.ForeignKey("empresas.id", onupdate="CASCADE", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    usuario_id = sa.Column(
+        sa.Integer,
+        sa.ForeignKey("usuarios.id", onupdate="CASCADE", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    perfil = sa.Column(sa.Enum(*PERFILS, name="perfil_usuario", default="cliente"))
+
+    usuario = db.relationship(Usuario, backref=db.backref("empresas", lazy="dynamic"))
+
+
 class Programa(db.Model):
 
     __tablename__ = "programas"

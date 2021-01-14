@@ -22,11 +22,22 @@ class Usuario(db.Model):
         return "{} ({})".format(self.nome_completo, self.fone)
 
     def to_dict(self):
+        perfil, empresa_id = self.perfil
         return {
             "id": self.id,
             "nome_completo": self.nome_completo,
             "fone": self.fone,
             "email": self.email,
             "avatar": self.avatar,
+            "perfil": perfil,
+            "empresa_id": empresa_id,
             "criado_em": self.criado_em.isoformat(),
         }
+
+    @property
+    def perfil(self):
+        gerente_de = self.empresas.first()
+        if not gerente_de:
+            return ("cliente", None)
+
+        return (gerente_de.perfil, gerente_de.empresa_id)

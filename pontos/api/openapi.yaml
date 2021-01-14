@@ -124,6 +124,46 @@ paths:
         404:
           description: Cartao não encontrado
 
+  /auth/signin:
+    post:
+      operationId: pontos.api.auth.signin
+      description: Faz login para obter JWT token
+      tags:
+        - Autenticação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required:
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  example: usuario@example.com
+                password:
+                  type: string
+                  example: secrets
+
+      responses:
+        200:
+          description: Token de acesso
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  usuario:
+                    $ref: "#/components/schemas/Usuario"
+                  token:
+                    type: string
+                    example: Encripted.JWT.Token
+        400:
+          description: Email ou senha inválida
+
 components:
 
   schemas:
@@ -164,6 +204,13 @@ components:
         avatar:
           type: string
           example: http://example.com/img/avatar/jose_thumb.png
+          nullable: true
+        perfil:
+          type: string
+          example: gerente ou cliente
+        empresa_id:
+          type: integer
+          example: 1
           nullable: true
         criado_em:
           type: string
