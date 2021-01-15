@@ -103,7 +103,7 @@ def remover_ponto(cartao_id):
         cartao = Cartao.query.filter(Cartao.id == cartao_id).one()
         usuario = Usuario.query.filter(Usuario.id == cartao.usuario_id).one()
 
-        ponto = Ponto.query.filter(Ponto.removido_em == None).first()
+        ponto = Ponto.query.filter(Ponto.cartao_id == cartao_id).filter(Ponto.removido_em == None).first()
         if ponto is None:
             raise InvalidValueException("Cartão ID: {} não tem ponto para ser removido".format(cartao_id))
 
