@@ -26,17 +26,24 @@ def cli():
 @click.option("--nome", prompt=True, required=True)
 @click.option("--fone", prompt=True, required=True)
 @click.option("--email", prompt=True, required=True)
-@click.option("--perfil", prompt=True, required=True, default="gerente")
-@click.option("--empresa_id", prompt=True, required=False, default=None)
+@click.option("--perfil", prompt=True, required=True, type=click.Choice(["cliente", "gerente", "admin"]))
+@click.option("--empresa_id", prompt=True, required=False, default="")
 @click.password_option(help="Password.")
 def criar_usuario(nome, fone, email, perfil, empresa_id, password):
     """Criar novo usuário."""
 
-    novo_usuario = usuarios_services.criar_usuario(
-        nome_completo=nome, fone=fone, email=email, password=password, perfil=perfil, empresa_id=empresa_id
-    )
+    if perfil != "gerente" or not empresa_id:
+        empresa_id = None
 
-    print(json.dumps(novo_usuario, indent=2))
+    try:
+
+        novo_usuario = usuarios_services.criar_usuario(
+            nome_completo=nome, fone=fone, email=email, password=password, perfil=perfil, empresa_id=empresa_id
+        )
+        print(json.dumps(novo_usuario, indent=2))
+
+    except Exception as error:
+        print(str(error))
 
 
 if __name__ == "__main__":

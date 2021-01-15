@@ -5,7 +5,7 @@ from pontos.models.usuarios import Usuario
 from pontos.models.cartoes import Empresa, EmpresaGerente
 
 
-def criar_usuario(nome_completo, fone, email, password, perfil=None, empresa_id=None):
+def criar_usuario(nome_completo, fone, email, password, perfil="cliente", empresa_id=None):
 
     if Usuario.query.filter_by(email=email).first():
         raise RuntimeError("Email já cadastrado")
@@ -13,9 +13,12 @@ def criar_usuario(nome_completo, fone, email, password, perfil=None, empresa_id=
     if Usuario.query.filter_by(fone=fone).first():
         raise RuntimeError("Fone já cadastrado")
 
-    if empresa_id:
+    if perfil == "gerente" and not empresa_id:
+        raise RuntimeError("Empresa-id é obrigatório para perfil de gerente")
+
+    if perfil == "gerente":
         if not Empresa.query.filter_by(id=empresa_id).first():
-            raise RuntimeError("Empresa ID inválida")
+            raise RuntimeError("Empresa ID inválido")
 
     password_hash = generate_password_hash(password)
 
@@ -28,7 +31,7 @@ def criar_usuario(nome_completo, fone, email, password, perfil=None, empresa_id=
     db.session.add(novo_usuario)
     db.session.commit()
 
-    if perfil == "gerente" and empresa_id:
+    if perfil == "gerente":
         perfil_do_usuario = EmpresaGerente(
             empresa_id=empresa_id,
             usuario_id=novo_usuario.id,
