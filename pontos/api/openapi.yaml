@@ -199,6 +199,15 @@ components:
         pontos:
           type: integer
           example: 3
+        criado_em:
+          type: string
+          format: date-time
+          example: 2021-01-11T11:32:28Z
+        premiado_em:
+          type: string
+          format: date-time
+          example: 2021-01-11T11:32:28Z
+          nullable: true
 
     Usuario:
       type: object

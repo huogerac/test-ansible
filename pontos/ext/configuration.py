@@ -38,6 +38,9 @@ class ProductionConfig(object):
     BASIC_AUTH_USERNAME = "pontos"
     BASIC_AUTH_PASSWORD = "pontos"
 
+    # PROGRAMA DE PONTOS
+    QTD_PONTOS_PARA_RESGATE = int(os.getenv("QTD_PONTOS_PARA_RESGATE", "10"))
+
 
 class TestingConfig(ProductionConfig):
     FLASK_ENV = "testing"

@@ -6,6 +6,9 @@ from pontos.exceptions import NotFoundException, InvalidValueException
 from pontos.ext.database import db
 from pontos.models.cartoes import Cartao, Ponto
 from pontos.models.usuarios import Usuario
+from pontos.ext.configuration import get_config_from_env
+
+config = get_config_from_env()
 
 
 def listar_cartoes(empresa_id, programa_id, page, page_size, token_info=None):
@@ -29,16 +32,20 @@ def listar_cartoes(empresa_id, programa_id, page, page_size, token_info=None):
             Usuario.avatar,
             Usuario.criado_em,
             pontos_ativos.c.total,
+            Cartao.criado_em,
+            Cartao.premiado_em,
         )
         .join(Usuario)
         .join(pontos_ativos, pontos_ativos.c.cartao_id == Cartao.id, isouter=True)
     )
 
-    if token_info["perfil"] == "gerente":
+    if token_info and token_info["perfil"] == "gerente":
         qs = qs.filter(Cartao.empresa_id == token_info["empresa_id"])
-    elif token_info["perfil"] == "cliente":
+    elif token_info and token_info["perfil"] == "cliente":
         usuario_id = token_info["sub"]
         qs = qs.filter(Cartao.usuario_id == usuario_id)
+    else:
+        qs = qs.all()
 
     return [
         {
@@ -54,8 +61,10 @@ def listar_cartoes(empresa_id, programa_id, page, page_size, token_info=None):
                 "criado_em": criado_em.isoformat(),
             },
             "pontos": pontos if pontos else 0,
+            "criado_em": c_criado_em.isoformat(),
+            "premiado_em": c_premiado_em.isoformat() if c_premiado_em else None,
         }
-        for (c_id, e_id, p_id, u_id, nome, fone, email, avatar, criado_em, pontos) in qs
+        for (c_id, e_id, p_id, u_id, nome, fone, email, avatar, criado_em, pontos, c_criado_em, c_premiado_em) in qs
     ]
 
 
@@ -79,11 +88,19 @@ def adicionar_ponto(cartao_id):
         cartao = Cartao.query.filter(Cartao.id == cartao_id).one()
         usuario = Usuario.query.filter(Usuario.id == cartao.usuario_id).one()
 
+        if cartao.premiado_em is not None:
+            raise InvalidValueException("Cartão ID: {} está premiado e não pode receber mais pontos".format(cartao_id))
+
         novo_ponto = Ponto(cartao_id=cartao.id)
         db.session.add(novo_ponto)
         db.session.commit()
 
         pontos = _obtem_pontos_do_cartao(cartao_id)
+
+        if pontos == config.QTD_PONTOS_PARA_RESGATE:
+            cartao.premiado_em = datetime.now(timezone.utc)
+            db.session.add(cartao)
+            db.session.commit()
 
         return {
             "id": cartao.id,
@@ -91,6 +108,8 @@ def adicionar_ponto(cartao_id):
             "programa_id": cartao.programa_id,
             "usuario": usuario.to_dict(),
             "pontos": pontos,
+            "criado_em": cartao.criado_em.isoformat(),
+            "premiado_em": cartao.premiado_em.isoformat() if cartao.premiado_em else None,
         }
 
     except NoResultFound:
@@ -119,6 +138,8 @@ def remover_ponto(cartao_id):
             "programa_id": cartao.programa_id,
             "usuario": usuario.to_dict(),
             "pontos": pontos,
+            "criado_em": cartao.criado_em.isoformat(),
+            "premiado_em": cartao.premiado_em.isoformat() if cartao.premiado_em else None,
         }
 
     except NoResultFound:
