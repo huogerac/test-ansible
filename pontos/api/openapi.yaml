@@ -25,14 +25,14 @@ paths:
       tags:
         - Cartoes
       security:
-        - oauth2: [cliente]
-        - oauth2: [gerente]
+        - oauth2: []
       parameters:
         - name: empresa_id
           in: query
           description: Id da empresa_id
           schema:
             type: integer
+            nullable: true
         - name: programa_id
           in: query
           description: Id do programa de pontos
@@ -43,11 +43,13 @@ paths:
           description: Índice da página
           schema:
             type: integer
+            nullable: true
         - name: page_size
           in: query
           description: Tamanho da página
           schema:
             type: integer
+            nullable: true
 
       responses:
         200:

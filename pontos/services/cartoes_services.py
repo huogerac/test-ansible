@@ -8,7 +8,7 @@ from pontos.models.cartoes import Cartao, Ponto
 from pontos.models.usuarios import Usuario
 
 
-def listar_cartoes():
+def listar_cartoes(empresa_id, programa_id, page, page_size, token_info=None):
 
     pontos_ativos = (
         db.session.query(Ponto.cartao_id.label("cartao_id"), func.count(Ponto.cartao_id).label("total"))
@@ -32,8 +32,13 @@ def listar_cartoes():
         )
         .join(Usuario)
         .join(pontos_ativos, pontos_ativos.c.cartao_id == Cartao.id, isouter=True)
-        .all()
     )
+
+    if token_info["perfil"] == "gerente":
+        qs = qs.filter(Cartao.empresa_id == token_info["empresa_id"])
+    elif token_info["perfil"] == "cliente":
+        usuario_id = token_info["sub"]
+        qs = qs.filter(Cartao.usuario_id == usuario_id)
 
     return [
         {

@@ -1,8 +1,8 @@
 from pontos.services import cartoes_services
 
 
-def listar_cartoes(token_info):
-    cartoes = cartoes_services.listar_cartoes()
+def listar_cartoes(empresa_id=None, programa_id=None, page=1, page_size=500, token_info=None):
+    cartoes = cartoes_services.listar_cartoes(empresa_id, programa_id, page, page_size, token_info)
     return {"data": cartoes}
 
 
