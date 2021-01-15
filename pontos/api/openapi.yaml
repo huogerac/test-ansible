@@ -133,6 +133,38 @@ paths:
         404:
           description: Cartao não encontrado
 
+  /cartao/{cartao_id}/ponto/utiliza:
+    post:
+      operationId: pontos.api.cartoes.utilizar_pontos
+      description: Utiliza cartao premiado e gera novo cartão em branco
+      tags:
+        - Cartoes
+      # security:
+      #   - oauth2: [gerente]
+      parameters:
+        - name: cartao_id
+          in: path
+          description: ID do cartao
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        201:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Cartao"
+        400:
+          description: Cartao não pode ser utilizado
+        401:
+          description: Not Authorized
+        403:
+          description: Not Allowed
+        404:
+          description: Cartao não encontrado
+
   /auth/signin:
     post:
       operationId: pontos.api.auth.signin

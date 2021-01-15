@@ -35,6 +35,7 @@ def listar_cartoes(empresa_id, programa_id, page, page_size, token_info=None):
             Cartao.criado_em,
             Cartao.premiado_em,
         )
+        .filter(Cartao.resgatado_em == None)
         .join(Usuario)
         .join(pontos_ativos, pontos_ativos.c.cartao_id == Cartao.id, isouter=True)
     )
@@ -141,6 +142,51 @@ def remover_ponto(cartao_id):
             "criado_em": cartao.criado_em.isoformat(),
             "premiado_em": cartao.premiado_em.isoformat() if cartao.premiado_em else None,
         }
+
+    except NoResultFound:
+        raise CartaoNaoEcontrado(cartao_id)
+
+
+def cria_cartao_em_branco(empresa_id, programa_id, usuario_id):
+
+    novo_cartao = Cartao(
+        empresa_id=empresa_id,
+        programa_id=programa_id,
+        usuario_id=usuario_id,
+    )
+    db.session.add(novo_cartao)
+    db.session.commit()
+
+    return {
+        "id": novo_cartao.id,
+        "empresa_id": novo_cartao.empresa_id,
+        "programa_id": novo_cartao.programa_id,
+        "pontos": 0,
+        "criado_em": novo_cartao.criado_em.isoformat(),
+        "premiado_em": novo_cartao.premiado_em.isoformat() if novo_cartao.premiado_em else None,
+    }
+
+
+def utilizar_pontos(cartao_id):
+    """ Utiliza cartao premiado (resgate) e cria novo cartão em branco"""
+    try:
+        cartao = Cartao.query.filter(Cartao.id == cartao_id).one()
+        usuario = Usuario.query.filter(Usuario.id == cartao.usuario_id).one()
+
+        if cartao.premiado_em is None:
+            raise InvalidValueException("Cartão ID: {} não tem todos pontos para utilização".format(cartao_id))
+
+        if cartao.resgatado_em is not None:
+            raise InvalidValueException("Cartão ID: {} já foi utilizado".format(cartao_id))
+
+        cartao.resgatado_em = datetime.now(timezone.utc)
+        db.session.add(cartao)
+        db.session.commit()
+
+        novo_cartao = cria_cartao_em_branco(cartao.empresa_id, cartao.programa_id, cartao.usuario_id)
+        novo_cartao["usuario"] = usuario.to_dict()
+
+        return novo_cartao
 
     except NoResultFound:
         raise CartaoNaoEcontrado(cartao_id)

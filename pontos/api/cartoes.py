@@ -12,3 +12,7 @@ def adicionar_ponto(cartao_id, token_info=None):
 
 def remover_ponto(cartao_id, token_info=None):
     return cartoes_services.remover_ponto(cartao_id)
+
+
+def utilizar_pontos(cartao_id, token_info=None):
+    return cartoes_services.utilizar_pontos(cartao_id), 201
