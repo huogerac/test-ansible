@@ -43,13 +43,13 @@ jobs:
     - name: Create the database
       run: flask db upgrade
       env:
-        FLASK_ENV: development
+        FLASK_ENV: testing
         FLASK_APP: pontos.app
         DATABASE_URI: postgresql://postgres:pontos123@localhost/pontos_test
 
     - name: Test with pytest
       run: pytest
       env:
-        FLASK_ENV: development
+        FLASK_ENV: testing
         FLASK_APP: pontos.app
         DATABASE_URI: postgresql://postgres:pontos123@localhost/pontos_test

@@ -91,3 +91,10 @@ class CartaoFactory(factory.alchemy.SQLAlchemyModelFactory):
     programa_id = 1
     usuario_id = 1
     criado_em = factory.Faker("date_time")
+
+
+@pytest.fixture
+def token_mock(mocker):
+    mock = mocker.patch("jwt.decode")
+    mock.return_value = {}
+    return mock

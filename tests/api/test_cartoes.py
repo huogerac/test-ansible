@@ -2,7 +2,9 @@ import mock
 
 
 @mock.patch("pontos.services.cartoes_services.listar_cartoes")
-def test_listar_todos_cartoes(listar_cartoes_mock, client):
+def test_listar_todos_cartoes(listar_cartoes_mock, client, token_mock):
+
+    token_mock.return_value = {"perfil": "gerente", "sub": 1}
 
     listar_cartoes_mock.return_value = [
         {
@@ -21,6 +23,6 @@ def test_listar_todos_cartoes(listar_cartoes_mock, client):
         }
     ]
 
-    response = client.get("/api/cartao")
+    response = client.get("/api/cartao", headers={"authorization": "Bearer TheJWT-Token"})
 
     assert response.status_code == 200

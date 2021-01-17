@@ -45,7 +45,7 @@ class ProductionConfig(object):
 class TestingConfig(ProductionConfig):
     FLASK_ENV = "testing"
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = "postgresql://pontos:pontos@localhost/pontos_test"
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI", "postgresql://pontos:pontos@localhost/pontos_test")
 
 
 class DevelopmentConfig(ProductionConfig):
