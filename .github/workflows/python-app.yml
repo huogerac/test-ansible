@@ -12,15 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
+
       postgres:
         image: postgres:11
         env:
-          POST
-
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_DB: pontos_test        
+          POSTGRES_DB: pontos_test
           POSTGRES_PASSWORD: pontos123
           POSTGRES_USER: postgres
         ports:
