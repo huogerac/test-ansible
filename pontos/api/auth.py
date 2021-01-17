@@ -6,5 +6,5 @@ def signin(body):
     usuario = auth_services.authenticate(email=body["email"], password=body["password"])
     return {
         "usuario": usuario.to_dict(),
-        "token": token_services.generate_token(usuario, days=7),
+        "token": token_services.generate_token(usuario, days=30),
     }

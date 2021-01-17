@@ -24,8 +24,8 @@ paths:
       description: Lista todos cartoes de clientes
       tags:
         - Cartoes
-      # security:
-      #   - oauth2: []
+      security:
+        - oauth2: []
       parameters:
         - name: empresa_id
           in: query
@@ -75,8 +75,8 @@ paths:
       description: Adiciona 1 ponto ao cartao
       tags:
         - Cartoes
-      # security:
-      #   - oauth2: [gerente]
+      security:
+        - oauth2: [gerente]
       parameters:
         - name: cartao_id
           in: path
@@ -107,8 +107,8 @@ paths:
       description: Remove 1 ponto do cartao
       tags:
         - Cartoes
-      # security:
-      #   - oauth2: [gerente]
+      security:
+        - oauth2: [gerente]
       parameters:
         - name: cartao_id
           in: path
@@ -139,8 +139,8 @@ paths:
       description: Utiliza cartao premiado e gera novo cartão em branco
       tags:
         - Cartoes
-      # security:
-      #   - oauth2: [gerente]
+      security:
+        - oauth2: [gerente]
       parameters:
         - name: cartao_id
           in: path
