@@ -45,11 +45,11 @@ jobs:
       env:
         FLASK_ENV: development
         FLASK_APP: pontos.app
-        SQLALCHEMY_DATABASE_URI: postgresql://postgres:pontos123@localhost/pontos_test
+        DATABASE_URI: postgresql://postgres:pontos123@localhost/pontos_test
 
     - name: Test with pytest
       run: pytest
       env:
         FLASK_ENV: development
         FLASK_APP: pontos.app
-        SQLALCHEMY_DATABASE_URI: postgresql://postgres:pontos123@localhost/pontos_test
+        DATABASE_URI: postgresql://postgres:pontos123@localhost/pontos_test
