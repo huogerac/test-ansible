@@ -4,7 +4,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from pontos.exceptions import NotFoundException, InvalidValueException
 from pontos.ext.database import db
-from pontos.models.cartoes import Cartao, Ponto
+from pontos.models.cartoes import Cartao, Ponto, Empresa
 from pontos.models.usuarios import Usuario
 from pontos.ext.configuration import get_config_from_env
 
@@ -34,9 +34,11 @@ def listar_cartoes(empresa_id, programa_id, page, page_size, token_info=None):
             pontos_ativos.c.total,
             Cartao.criado_em,
             Cartao.premiado_em,
+            Empresa.nome,
         )
         .filter(Cartao.resgatado_em == None)
         .join(Usuario)
+        .join(Empresa)
         .join(pontos_ativos, pontos_ativos.c.cartao_id == Cartao.id, isouter=True)
     )
 
@@ -51,7 +53,10 @@ def listar_cartoes(empresa_id, programa_id, page, page_size, token_info=None):
     return [
         {
             "id": c_id,
-            "empresa_id": e_id,
+            "empresa": {
+                "id": e_id,
+                "nome": empresa,
+            },
             "programa_id": p_id,
             "usuario": {
                 "id": u_id,
@@ -65,7 +70,21 @@ def listar_cartoes(empresa_id, programa_id, page, page_size, token_info=None):
             "criado_em": c_criado_em.isoformat(),
             "premiado_em": c_premiado_em.isoformat() if c_premiado_em else None,
         }
-        for (c_id, e_id, p_id, u_id, nome, fone, email, avatar, criado_em, pontos, c_criado_em, c_premiado_em) in qs
+        for (
+            c_id,
+            e_id,
+            p_id,
+            u_id,
+            nome,
+            fone,
+            email,
+            avatar,
+            criado_em,
+            pontos,
+            c_criado_em,
+            c_premiado_em,
+            empresa,
+        ) in qs
     ]
 
 

@@ -220,9 +220,8 @@ components:
         id:
           type: integer
           example: 100
-        empresa_id:
-          type: integer
-          example: 1
+        empresa:
+          $ref: "#/components/schemas/Empresa"
         programa_id:
           type: integer
           example: 1
@@ -272,4 +271,12 @@ components:
           format: date-time
           example: 2021-01-11T11:32:28Z
 
-
+    Empresa:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 100
+        nome_completo:
+          type: string
+          example: Empresa Um
