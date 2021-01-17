@@ -1,6 +1,5 @@
-import jwt
-from jwt.exceptions import InvalidTokenError
 from datetime import datetime, timezone, timedelta
+import jwt
 from flask import current_app
 
 from pontos.exceptions import UnauthorizedException
@@ -26,6 +25,7 @@ def generate_token(user, days=0, hours=0):
 
 
 def check_token_info(token):
+    # pylint: disable=W0707
     try:
         token_info = jwt.decode(
             jwt=token,

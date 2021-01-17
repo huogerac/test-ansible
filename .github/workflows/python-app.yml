@@ -40,6 +40,9 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install -r requirements-dev.txt
 
+    - name: Python Linter
+      run: pylint pontos/**/*.py
+
     - name: Create the database
       run: flask db upgrade
       env:

@@ -16,8 +16,14 @@ class Empresa(db.Model):
     def __repr__(self):
         return "{} ({})".format(self.nome, self.id)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nome": self.nome,
+        }
 
-class EmpresaGerente(db.Model):
+
+class EmpresaGerente(db.Model):  # pylint: disable=R0903
 
     __tablename__ = "empresagerentes"
 
@@ -59,7 +65,13 @@ class Programa(db.Model):
     empresa = db.relationship(Empresa, backref=db.backref("programas", lazy="dynamic"))
 
     def __repr__(self):
-        return self.nome
+        return str(self.nome)
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "nome": self.nome,
+        }
 
 
 class Cartao(db.Model):
@@ -95,8 +107,13 @@ class Cartao(db.Model):
     def __repr__(self):
         return "Cartao {}".format(self.id)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+        }
 
-class Ponto(db.Model):
+
+class Ponto(db.Model):  # pylint: disable=R0903
     __tablename__ = "pontos"
 
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)

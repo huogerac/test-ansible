@@ -16,12 +16,12 @@ def get_config_from_env():
     envname = os.getenv("FLASK_ENV", "development").lower()
     if envname == "production":
         return ProductionConfig()
-    elif envname == "testing":
+    if envname == "testing":
         return TestingConfig()
     return DevelopmentConfig()
 
 
-class ProductionConfig(object):
+class ProductionConfig:  # pylint: disable=R0903
     FLASK_ENV = "production"
     DEBUG = False
     TESTING = False
@@ -42,13 +42,13 @@ class ProductionConfig(object):
     QTD_PONTOS_PARA_RESGATE = int(os.getenv("QTD_PONTOS_PARA_RESGATE", "10"))
 
 
-class TestingConfig(ProductionConfig):
+class TestingConfig(ProductionConfig):  # pylint: disable=R0903
     FLASK_ENV = "testing"
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URI", "postgresql://pontos:pontos@localhost/pontos_test")
 
 
-class DevelopmentConfig(ProductionConfig):
+class DevelopmentConfig(ProductionConfig):  # pylint: disable=R0903
     FLASK_ENV = "development"
     DEBUG = True
 

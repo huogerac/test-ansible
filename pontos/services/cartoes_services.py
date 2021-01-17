@@ -12,7 +12,7 @@ config = get_config_from_env()
 
 
 def listar_cartoes(empresa_id, programa_id, page, page_size, token_info=None):
-
+    # pylint: disable=C0121,C0103,W0613
     pontos_ativos = (
         db.session.query(Ponto.cartao_id.label("cartao_id"), func.count(Ponto.cartao_id).label("total"))
         .group_by(Ponto.cartao_id)
@@ -89,6 +89,7 @@ def listar_cartoes(empresa_id, programa_id, page, page_size, token_info=None):
 
 
 def _obtem_pontos_do_cartao(cartao_id):
+    # pylint: disable=C0121
     try:
         _, pontos = (
             db.session.query(Ponto.cartao_id, func.count(Ponto.cartao_id))
@@ -102,8 +103,9 @@ def _obtem_pontos_do_cartao(cartao_id):
         return 0
 
 
-def adicionar_ponto(cartao_id):
+def adicionar_ponto(cartao_id, token_info=None):
     """ Adiciona 1 ponto ao cartao"""
+    # pylint: disable=W0707,W0613
     try:
         cartao = Cartao.query.filter(Cartao.id == cartao_id).one()
         usuario = Usuario.query.filter(Usuario.id == cartao.usuario_id).one()
@@ -136,8 +138,9 @@ def adicionar_ponto(cartao_id):
         raise CartaoNaoEcontrado(cartao_id)
 
 
-def remover_ponto(cartao_id):
+def remover_ponto(cartao_id, token_info=None):
     """ Remove 1 ponto do cartao"""
+    # pylint: disable=W0707,W0613,C0121
     try:
         cartao = Cartao.query.filter(Cartao.id == cartao_id).one()
         usuario = Usuario.query.filter(Usuario.id == cartao.usuario_id).one()
@@ -186,8 +189,9 @@ def cria_cartao_em_branco(empresa_id, programa_id, usuario_id):
     }
 
 
-def utilizar_pontos(cartao_id):
+def utilizar_pontos(cartao_id, token_info=None):
     """ Utiliza cartao premiado (resgate) e cria novo cartão em branco"""
+    # pylint: disable=W0707,W0613
     try:
         cartao = Cartao.query.filter(Cartao.id == cartao_id).one()
         usuario = Usuario.query.filter(Usuario.id == cartao.usuario_id).one()
@@ -211,6 +215,6 @@ def utilizar_pontos(cartao_id):
         raise CartaoNaoEcontrado(cartao_id)
 
 
-class CartaoNaoEcontrado(NotFoundException):
+class CartaoNaoEcontrado(NotFoundException):  # pylint: disable=R0903
     def __init__(self, cartao_id):
         super().__init__(f"Cartão ID: '{cartao_id}' não encontrado")

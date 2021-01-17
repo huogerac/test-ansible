@@ -7,12 +7,12 @@ def listar_cartoes(empresa_id=None, programa_id=None, page=1, page_size=500, tok
 
 
 def adicionar_ponto(cartao_id, token_info=None):
-    return cartoes_services.adicionar_ponto(cartao_id)
+    return cartoes_services.adicionar_ponto(cartao_id, token_info)
 
 
 def remover_ponto(cartao_id, token_info=None):
-    return cartoes_services.remover_ponto(cartao_id)
+    return cartoes_services.remover_ponto(cartao_id, token_info)
 
 
 def utilizar_pontos(cartao_id, token_info=None):
-    return cartoes_services.utilizar_pontos(cartao_id), 201
+    return cartoes_services.utilizar_pontos(cartao_id, token_info), 201

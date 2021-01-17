@@ -6,7 +6,7 @@ from pontos.models.cartoes import Empresa, EmpresaGerente
 
 
 def criar_usuario(nome_completo, fone, email, password, perfil="cliente", empresa_id=None):
-
+    # pylint: disable=R0913
     if Usuario.query.filter_by(email=email).first():
         raise RuntimeError("Email já cadastrado")
 
